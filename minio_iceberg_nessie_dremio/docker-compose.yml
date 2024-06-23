@@ -1,0 +1,38 @@
+version: '1.0'
+
+services:
+  nessie:
+    image: projectnessie/nessie
+    container_name: nessie
+    ports:
+    - "19120:19120"
+
+  test_spark:
+    image: alexmerced/spark33-notebook/
+    container_name: test_spark
+    ports:
+    - "8888:8888"
+    volumes:
+    - ./datasets:/home/docker/datasets
+    - ./notebooks:/home/docker/notebooks
+
+  minio:
+    image: minio/minio
+    container_name: test_minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: server /data --console-address ":9001"
+    volumes:
+    - ./minio-data-nessie:/data
+
+  dremio:
+    image: dremio/dremio-oss:latest
+    container_name: dremio
+    ports:
+    - 9047:9047
+    - 31010:31010
+    - 32010:32010
