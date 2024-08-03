@@ -1,0 +1,6 @@
+metastore-postgresql/
+data/
+
+hive-metastore/
+
+pgdata/
